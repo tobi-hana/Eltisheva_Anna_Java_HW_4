@@ -22,29 +22,34 @@ public class Main {
                 new InputStreamReader(
                         new FileInputStream("poem.txt"), StandardCharsets.UTF_16))){
 
-            while((theLine = reader.readLine()) != null) {
-                if(theLine.isBlank()) {
+            while((theLine = reader.readLine())!= null) {
+                if(theLine.isEmpty()) {
                     lines.remove(lines.size() - 1);
-                    BufferedWriter writer = new BufferedWriter(
-                            new OutputStreamWriter(
-                                    new FileOutputStream(
-                                            String.format("part%d.txt", counter)),
-                                            StandardCharsets.UTF_16));
-                    for(String line : lines) {
-                        writer.write(line);
-                        writer.newLine();
-                    }
-                    writer.close();
-                    lines.clear();
+                    writePartOfPoem(lines, counter);
                     counter++;
-                }else {
+                } else {
                     lines.add(theLine);
                 }
             }
+            writePartOfPoem(lines, counter);
 
         }catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+    public static void writePartOfPoem(List<String> lines, int num) throws IOException{
+        BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(
+                        new FileOutputStream(
+                                String.format("part%d.txt", num)),
+                        StandardCharsets.UTF_16));
+        for(String line : lines) {
+            writer.write(line);
+            writer.newLine();
+        }
+        writer.close();
+        lines.clear();
 
     }
 }
